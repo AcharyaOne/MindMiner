@@ -34,7 +34,12 @@ $Cfg.Algorithms | ForEach-Object {
 			# find pool by algorithm
 			$Pool = Get-Pool($Algo)
 			if ($Pool) {
-				$proto = $Pool.Protocol.Replace("stratum", "stratum2");
+				if ($Pool.Name -match "nicehash") {
+				$proto = $Pool.Protocol.Replace("stratum", "stratum2")
+				}
+				if ($Pool.Name -notmatch "nicehash") {
+				$proto = $Pool.Protocol.Replace("stratum2", "stratum")
+				}
 				$extrargs = Get-Join " " @($Cfg.ExtraArgs, $_.ExtraArgs)
 				[MinerInfo]@{
 					Pool = $Pool.PoolName()
